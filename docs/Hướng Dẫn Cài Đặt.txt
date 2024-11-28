@@ -1,0 +1,14 @@
+Bước 1: Cài đặt Composer và php vào máy (Để mã nguồn chạy ổn định nhất có thể cài phiên bản sau)
+        PHP 8.1.25 (cli) (built: Oct 25 2023 08:06:57)
+        Composer version 2.7.6 2024-05-04 23:03:15
+Bước 2: Tải toàn bộ mã nguồn về
+Bước 3: Tạo database (ql_thu_vien) hoặc tên khác và phải đổi tên nó ở file (.env), bằng mySql(xampp, workbench, laragon)
+Bước 4: Import file data vào cơ sở dữ liệu vừa tạo ở thư mục(database/ql_thu_vien.sql) 
+Bước 5: Mở terminal của dự án chạy lệnh (php artisan serve) để khởi động dự án
+Bước 6: Mở trình duyệt bất kỳ và gõ đường dẫn sau(http://localhost:8000/public/admin/dashboard)
+
+ĐÂY LÀ TÀI KHOẢN ĐĂNG NHẬP:
+    Username: admin
+    Password: 12345678
+
+Nếu có bất kì lỗi nào khiến không thể cài đặt dự án liên hệ zalo: 0388937608 để được tư vấn

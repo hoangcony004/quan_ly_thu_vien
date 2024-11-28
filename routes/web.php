@@ -1,0 +1,80 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\admin\auth\AuthController;
+use App\Http\Controllers\admin\auth\ForgotPasswordController;
+use App\Http\Controllers\admin\TacGiaController;
+use App\Http\Controllers\admin\TheLoaiController;
+use App\Http\Controllers\admin\NhaXuatBanController;
+use App\Http\Controllers\admin\SachController;
+use App\Http\Controllers\SearchController;
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('admin.pages.home-page');
+});
+
+Route::get('/login', [AuthController::class, 'getLogin'])->name('auth.getLogin');
+Route::post('/login', [AuthController::class, 'postLogin'])->name('auth.postLogin');
+Route::get('/logout', [AuthController::class, 'getlogout'])->name('auth.getLogout');
+
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::group(['prefix' => 'public/admin'], function () {
+        Route::get('/dashboard', [AdminController::class, 'getDashboard'])->name('dashboard');
+
+        Route::group(['prefix' => '/tac-gia'], function () {
+            Route::get('/', [TacGiaController::class, 'getTacGia'])->name('tacgia.getTacGia');
+            Route::post('/post-add-tac-gia', [TacGiaController::class, 'postAddTacGia'])->name('tacgia.postAddTacGia');
+            Route::get('/edit-tac-gia/{id}', [TacGiaController::class, 'getEditTacGia'])->name('tacgia.getEditTacGia');
+            Route::put('/edit-tac-gia/{id}', [TacGiaController::class, 'postEditTacGia'])->name('tacgia.postEditTacGia');
+            Route::post('/tac-gia-xoa/{id}', [TacGiaController::class, 'postDeleteTacGia'])->name('tacgia.postDeleteTacGia');
+            Route::get('/tim-kiem-tac-gia', [TacGiaController::class, 'getTimKiemTacGia'])->name('tacgia.getTimKiemTacGia');
+        });
+        Route::group(['prefix' => '/the-loai'], function () {
+            Route::get('/', [TheLoaiController::class, 'getTheLoai'])->name('theloai.getTheLoai');
+            Route::post('/add-the-loai', [TheLoaiController::class, 'postAddTheLoai'])->name('theloai.postAddTheLoai');
+            Route::get('/edit-the-loai/{id}', [TheLoaiController::class, 'getEditTheLoai'])->name('theloai.getEditTheLoai');
+            Route::put('/edit-the-loai/{id}', [TheLoaiController::class, 'postEditTheLoai'])->name('theloai.postEditTheLoai');
+            Route::post('/xoa-the-loai/{id}', [TheLoaiController::class, 'postDeleteTheLoai'])->name('theloai.postDeleteTheLoai');
+            Route::get('/tim-kiem-the-loai', [TheLoaiController::class, 'getTimKiemTheLoai'])->name('theloai.getTimKiemTheLoai');
+        });
+
+        Route::get('/tim-kiem-chuc-nang-he-thong', [SearchController::class, 'index'])->name('admin.Search');
+    });
+});
+
+// Route xóa tất cả thông báo (POST request)
+Route::post('/clear-notifications', function () {
+    // Xóa tất cả thông báo trong session
+    session()->forget('notifications');
+
+    // Trả về phản hồi JSON để cập nhật giao diện
+    return response()->json([
+        'message' => 'Đã xóa tất cả thông báo!',
+        'notifications_count' => 0,
+        'notifications' => []
+    ]);
+})->name('clear.notifications');
+
+Route::post('/clear-toast-session', function () {
+    session()->forget('toast_message');
+    session()->forget('toast_type');
+    return response()->json(['status' => 'success']);
+});
