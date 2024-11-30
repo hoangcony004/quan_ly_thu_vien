@@ -66,7 +66,7 @@
                 @else
                 <br>
                 <div class="text-center">
-                    <strong>Chưa có thông báo nào</strong>
+                    <strong>Không có thông báo</strong>
                 </div>
                 @endif
             </div>

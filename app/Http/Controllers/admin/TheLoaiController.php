@@ -27,11 +27,12 @@ class TheLoaiController extends Controller
 
         // Truy vấn lưu dữ liệu từ bảng 'the_loai' với phân trang 5 phần tử 1 trang
         $theloaiList = TheLoai::paginate(5);
-
+        $query = null;
         // Chuyển hướng và truyền thông báo xuất
         return view('admin.pages.the-loai')
             ->with('title', $this->title)
-            ->with('theloaiList', $theloaiList);
+            ->with('theloaiList', $theloaiList)
+            ->with('query', $query);
     }
 
     public function postAddTheLoai(Request $request)
@@ -157,7 +158,7 @@ class TheLoaiController extends Controller
         return redirect()->route('theloai.getTheLoai');
     }
 
-    public function getTimKiemTheLoai(Request $request)
+    public function getSearchTheLoai(Request $request)
     {
         // Khai báo title
         $this->title = 'Admin - Tìm Kiếm Thể Loại';
@@ -174,5 +175,16 @@ class TheLoaiController extends Controller
             ->with('title', $this->title)
             ->with('theloaiList', $theloaiList)
             ->with('query', $query);
+    }
+
+    public function getAPITheLoai(Request $request)
+    {
+        $search = $request->input('search'); // Lấy từ khóa tìm kiếm
+        $theLoais = TheLoai::where('trangThai', true)
+            ->where('tenTheLoai', 'LIKE', "%$search%")
+            ->take(10) // Giới hạn số lượng kết quả trả về
+            ->get(['id', 'tenTheLoai']); // Chỉ lấy cột cần thiết
+
+        return response()->json($theLoais);
     }
 }

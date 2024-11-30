@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('tenSach');
             $table->date('ngayXuatBan');
             $table->integer('soLuong');
+            $table->string('image')->nullable();
             $table->string('moTa');
             $table->timestamps();
         });

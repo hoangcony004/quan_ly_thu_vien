@@ -24,10 +24,11 @@ class TacGiaController extends Controller
     {
         $this->title = 'Admin - Tác Giả';
         $tacgiaList = TacGia::paginate(5);
-
+        $query = null;
         return view('admin.pages.tac-gia')
             ->with('title', $this->title)
-            ->with('tacgiaList', $tacgiaList);
+            ->with('tacgiaList', $tacgiaList)
+            ->with('query', $query);
     }
 
     public function postAddTacGia(Request $request)
@@ -212,5 +213,16 @@ class TacGiaController extends Controller
             ->with('title', $this->title)
             ->with('tacgiaList', $tacgiaList)
             ->with('query', $query);
+    }
+
+    public function getAPITacGia(Request $request)
+    {
+        $search = $request->input('search'); // Lấy từ khóa tìm kiếm
+        $tacGias = TacGia::where('trangThai', true)
+            ->where('tenTacGia', 'LIKE', "%$search%")
+            ->take(10) // Giới hạn số lượng kết quả trả về
+            ->get(['id', 'tenTacGia']); // Chỉ lấy cột cần thiết
+
+        return response()->json($tacGias);
     }
 }

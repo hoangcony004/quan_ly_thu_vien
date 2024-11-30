@@ -52,10 +52,10 @@
             <a href="#"><i class="fa fa-table"></i> <span class="nav-label">Quản Lý Thư Viện</span><span
                     class="fa arrow"></span></a>
             <ul class="nav nav-second-level collapse">
-                <li><a href="">Kho Sách</a></li>
+                <li><a href="{{ route('khosach.getKhoSach')}}">Kho Sách</a></li>
                 <li><a href="{{ route('tacgia.getTacGia') }}">Tác Giả</a></li>
                 <li><a href="{{ route('theloai.getTheLoai') }}">Thể Loại</a></li>
-                <li><a href="">Nhà Xuất Bản</a></li>
+                <li><a href="{{ route('nhaxuatban.getNhaXuatBan') }}">Nhà Xuất Bản</a></li>
             </ul>
         </li>
 

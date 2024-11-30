@@ -15,7 +15,7 @@ class NhaXuatBan extends Model
     // Các thuộc tính có thể được gán
     protected $fillable = [
         'tenNhaXuatBan',
-        'soDienthoai',
+        'soDienThoai',
         'email',
         'diaChi',
         'trangThai',

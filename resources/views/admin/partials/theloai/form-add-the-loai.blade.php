@@ -31,5 +31,6 @@
                 <button type="submit" class="btn btn-primary">Thêm mới</button>
             </div>
         </form>
+        @include('admin.partials.error')
     </div>
 </div>

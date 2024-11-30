@@ -36,6 +36,10 @@ return [
     */
 
     'guards' => [
+        'api' => [
+            'driver' => 'jwt',  // Sử dụng JWT driver
+            'provider' => 'users', // Sử dụng provider cho người dùng (có thể thay đổi nếu bạn sử dụng model khác)
+        ],
         'web' => [
             'driver' => 'session',
             'provider' => 'users',

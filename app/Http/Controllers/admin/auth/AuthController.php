@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\NotificationService;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -47,35 +48,48 @@ class AuthController extends Controller
             'g-recaptcha-response.required' => 'Vui lòng xác nhận rằng bạn không phải là robot.',
             'g-recaptcha-response.captcha' => 'Xác minh reCAPTCHA không thành công, vui lòng thử lại.',
         ]);
-
+    
         // Xử lý đăng nhập sau khi kiểm tra reCAPTCHA
         $credentials = $request->only('username', 'password');
-
+    
         if (Auth::attempt($credentials)) {
-
+            // Lấy người dùng hiện tại
             $user = Auth::user();
-            session(['name' => $user->name]);
-            session(['role' => $user->role]);
-            session(['image' => $user->image]);
-
-            // Giả sử đăng nhập thành công
-            // session()->flash('success', 'Đăng nhập thành công.');
-            $this->notificationService->addNotification('Đăng nhập thành công!', 'success');
-            // dd(session('notifications')); // In dữ liệu session ra để kiểm tra
-
-
-            // Lấy URL đã lưu trước khi đăng nhập hoặc chuyển hướng đến dashboard nếu không có
-            return redirect()->intended(route('dashboard'));
+    
+            // Tạo JWT token cho người dùng
+            $token = JWTAuth::fromUser($user);
+            // dd($token);die;
+    
+            // Kiểm tra xem yêu cầu có phải từ API hay không
+            if ($request->wantsJson()) {
+                // Nếu yêu cầu từ API, trả về token
+                return response()->json([
+                    'message' => 'Đăng nhập thành công',
+                    'token' => $token
+                ]);
+            } else {
+                // Nếu yêu cầu từ giao diện web, lưu thông tin người dùng vào session và chuyển hướng
+                session(['name' => $user->name]);
+                session(['role' => $user->role]);
+                session(['image' => $user->image]);
+    
+                // Thông báo thành công
+                $this->notificationService->addNotification('Đăng nhập thành công!', 'success');
+    
+                // Chuyển hướng đến dashboard
+                return redirect()->intended(route('dashboard'));
+            }
         } else {
-            // Thông báo lỗi giữ nguyên cách cũ
+            // Nếu đăng nhập không thành công
             session()->flash('error', 'Sai tên đăng nhập hoặc mật khẩu!');
             return redirect()->back()->withInput();
         }
-
+    
         // Nếu đăng nhập không thành công
         session()->flash('error', 'Thông tin đăng nhập không đúng.'); // Thông báo lỗi
         return redirect()->back()->withInput(); // Giữ lại các giá trị đã nhập
     }
+    
 
     public function getLogout()
     {

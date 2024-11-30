@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\admin\TacGiaController;
+use App\Http\Controllers\admin\TheLoaiController;
+use App\Http\Controllers\admin\NhaXuatBanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +20,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Route::middleware(['jwt.auth'])->group(function () {
+    Route::get('/tac-gia', [TacGiaController::class, 'getAPITacGia']);
+    Route::get('/the-loai', [TheLoaiController::class, 'getAPITheLoai']);
+    Route::get('/nha-xuat-ban', [NhaXuatBanController::class, 'getAPINhaXuatBan']);
+// });

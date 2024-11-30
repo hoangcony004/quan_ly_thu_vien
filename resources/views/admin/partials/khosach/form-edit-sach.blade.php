@@ -7,7 +7,7 @@
                 <i class="fa fa-chevron-circle-left"></i> Quay lại
             </a>
             <div class="ibox-title">
-                <h5>Sửa Tác Giả</h5>
+                <h5>Sửa Thể Loại</h5>
                 <div class="ibox-tools">
                     <a class="collapse-link">
                         <i class="fa fa-chevron-up"></i>
@@ -27,23 +27,23 @@
                 </div>
             </div>
             <div class="ibox-content">
-                <form action="{{ route('tacgia.postEditTacGia', ['id' => $tacgia->id]) }}" method="post">
+                <form action="{{ route('nhaxuatban.postEditNhaXuatBan', ['id' => $nhaxuatban->id]) }}" method="post">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
                         <!-- Các ô input điền thông tin -->
                         <div class="mb-3">
+
                             <div class="row g-3 align-items-center">
                                 <div class="col-md-6">
-                                    <label for="inputName" class="form-label">Tên Tác Giả</label>
-                                    <input type="text" class="form-control" id="inputName" name="tenTacGia" required
-                                        placeholder="Nhập tên tác giả..." value="{{ $tacgia->tenTacGia }}">
+                                    <label for="inputName" class="form-label">Tên Nhà Xuất Bản</label>
+                                    <input type="text" class="form-control" id="inputName" name="tenNhaXuatBan" required
+                                        placeholder="Nhập tên nhà xuất bản..." value="{{ $nhaxuatban->tenNhaXuatBan }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Trạng Thái: </label><br>
                                     <input type="checkbox" class="js-switch" name="trangThai" id="id_switch" value="1"
-                                        {{ $tacgia->trangThai ? 'checked' : '' }} />
-
+                                        {{ $nhaxuatban->trangThai ? 'checked' : '' }} />
                                 </div>
                             </div>
                         </div><br>
@@ -51,25 +51,23 @@
                         <div class="mb-3">
                             <div class="row g-3 align-items-center">
                                 <div class="col-md-6">
-                                    <label for="inputNgaySinh" class="form-label">Ngày Sinh</label>
-                                    <input type="date" class="form-control" name="ngaySinh" id="inputNgaySinh" required
-                                        placeholder="Nhập ngày sinh..." value="{{ $tacgia->ngaySinh }}">
+                                    <label class="form-label">Số Điện Thoại</label>
+                                    <input type="number" class="form-control" name="soDienThoai" required
+                                        placeholder="Nhập số điện thoại..." value="{{ $nhaxuatban->soDienThoai }}">
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="inputNgayMat" class="form-label">Ngày Mất (Nếu tác giả chưa mất thì bỏ
-                                        trống)</label>
-                                    <input type="date" class="form-control" name="ngayMat" id="inputNgayMat"
-                                        placeholder="Nhập ngày mất..." value="{{ $tacgia->ngayMat }}">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email"
+                                        placeholder="Nhập email..." value="{{ $nhaxuatban->email }}">
                                 </div>
                             </div>
                         </div><br>
 
                         <div class="mb-3">
-                            <label for="inputName" class="form-label">Mô tả về tác giả</label>
-                            <textarea class="form-control" name="moTa"
-                                placeholder="Nhập mô tả về tác giả(Khoảng 100 từ)...">{{ $tacgia->moTa }}</textarea>
+                            <label for="inputName" class="form-label">Địa Chỉ</label>
+                            <textarea class="form-control" name="diaChi"
+                                placeholder="Nhập địa chỉ...">{{ $nhaxuatban->diaChi }}</textarea>
                         </div>
-
                     </div>
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button> -->
@@ -80,7 +78,15 @@
             </div>
         </div>
     </div>
-
 </div>
-
+@if($errors->any())
+                    <div
+                        style="color: red; margin: 10px 0; padding: 10px; border: 1px solid red; border-radius: 5px; background-color: #ffe6e6;">
+                        <ul style="margin: 0; padding: 0; list-style: none;">
+                            @foreach ($errors->all() as $error)
+                            <li style="margin-bottom: 5px;">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
 @endsection

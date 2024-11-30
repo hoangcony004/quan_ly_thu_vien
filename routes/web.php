@@ -7,7 +7,7 @@ use App\Http\Controllers\admin\auth\ForgotPasswordController;
 use App\Http\Controllers\admin\TacGiaController;
 use App\Http\Controllers\admin\TheLoaiController;
 use App\Http\Controllers\admin\NhaXuatBanController;
-use App\Http\Controllers\admin\SachController;
+use App\Http\Controllers\admin\KhoSachController;
 use App\Http\Controllers\SearchController;
 
 
@@ -39,6 +39,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'public/admin'], function () {
         Route::get('/dashboard', [AdminController::class, 'getDashboard'])->name('dashboard');
 
+        Route::group(['prefix' => '/kho-sach'], function () {
+            Route::get('/', [KhoSachController::class, 'getKhoSach'])->name('khosach.getKhoSach');
+            Route::post('/post-add-sach', [KhoSachController::class, 'postAddSach'])->name('khosach.postAddSach');
+            Route::get('/edit-sach/{id}', [KhoSachController::class, 'getEditSach'])->name('khosach.getEditSach');
+            Route::put('/edit-sach/{id}', [KhoSachController::class, 'postEditSach'])->name('PEditSach');
+            Route::post('/xoa-sach/{id}', [KhoSachController::class, 'postDeleteSach'])->name('khosach.postDeleteSach');
+            // Route::get('/search-sach', [KhoSachController::class, 'getBooks'])->name('searchSach');
+        });
         Route::group(['prefix' => '/tac-gia'], function () {
             Route::get('/', [TacGiaController::class, 'getTacGia'])->name('tacgia.getTacGia');
             Route::post('/post-add-tac-gia', [TacGiaController::class, 'postAddTacGia'])->name('tacgia.postAddTacGia');
@@ -53,7 +61,15 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/edit-the-loai/{id}', [TheLoaiController::class, 'getEditTheLoai'])->name('theloai.getEditTheLoai');
             Route::put('/edit-the-loai/{id}', [TheLoaiController::class, 'postEditTheLoai'])->name('theloai.postEditTheLoai');
             Route::post('/xoa-the-loai/{id}', [TheLoaiController::class, 'postDeleteTheLoai'])->name('theloai.postDeleteTheLoai');
-            Route::get('/tim-kiem-the-loai', [TheLoaiController::class, 'getTimKiemTheLoai'])->name('theloai.getTimKiemTheLoai');
+            Route::get('/tim-kiem-the-loai', [TheLoaiController::class, 'getSearchTheLoai'])->name('theloai.getTimKiemTheLoai');
+        });
+        Route::group(['prefix' => '/nha-xuat-ban'], function () {
+            Route::get('/', [NhaXuatBanController::class, 'getNhaXuatBan'])->name('nhaxuatban.getNhaXuatBan');
+            Route::post('/add-nha-xuat-ban', [NhaXuatBanController::class, 'postAddNhaXuatBan'])->name('nhaxuatban.postAddNhaXuatBan');
+            Route::get('/edit-nha-xuat-ban/{id}', [NhaXuatBanController::class, 'getEditNhaXuatBan'])->name('nhaxuatban.getEditNhaXuatBan');
+            Route::put('/edit-nha-xuat-ban/{id}', [NhaXuatBanController::class, 'postEditNhaXuatBan'])->name('nhaxuatban.postEditNhaXuatBan');
+            Route::post('/xoa-nha-xuat-ban/{id}', [NhaXuatBanController::class, 'postDeleteNhaXuatBan'])->name('nhaxuatban.postDeleteNhaXuatBan');
+            Route::get('/search-nha-xuat-ban', [NhaXuatBanController::class, 'getSearchNhaXuatBan'])->name('nhaxuatban.getSearchNhaXuatBan');
         });
 
         Route::get('/tim-kiem-chuc-nang-he-thong', [SearchController::class, 'index'])->name('admin.Search');

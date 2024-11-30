@@ -5,7 +5,7 @@ namespace App\Models\admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Sach extends Model
+class KhoSach extends Model
 {
     use HasFactory;
 
@@ -19,6 +19,7 @@ class Sach extends Model
         'tenSach',
         'ngayXuatBan',
         'soLuong',
+        'image',
         'moTa',
         'created_at',
         'updated_at'
