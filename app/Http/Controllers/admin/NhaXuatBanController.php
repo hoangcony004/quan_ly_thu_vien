@@ -41,7 +41,7 @@ class NhaXuatBanController extends Controller
         // Xác thực dữ liệu đầu vào
         $request->validate([
             'tenNhaXuatBan' => 'required|string|max:255',
-            'soDienThoai' => 'required|digits_between:1,10',
+            'soDienThoai' => 'required|digits_between:1,12',
             'email' => 'nullable|email|max:255',
             'diaChi' => 'required|string',
         ]);        
@@ -86,7 +86,7 @@ class NhaXuatBanController extends Controller
         // Xác thực dữ liệu đầu vào
         $request->validate([
             'tenNhaXuatBan' => 'required|string|max:255',
-            'soDienThoai' => 'required|digits_between:1,10',
+            'soDienThoai' => 'required|digits_between:1,12',
             'email' => 'nullable|email|max:255',
             'diaChi' => 'required|string',
         ]);        

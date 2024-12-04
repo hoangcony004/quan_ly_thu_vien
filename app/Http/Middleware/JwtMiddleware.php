@@ -12,14 +12,18 @@ class JwtMiddleware
     public function handle(Request $request, Closure $next)
     {
         try {
-            // Kiểm tra nếu token hợp lệ
+            // Kiểm tra token hợp lệ và xác thực người dùng
             $user = JWTAuth::parseToken()->authenticate();
         } catch (JWTException $e) {
-            // Nếu token không hợp lệ hoặc hết hạn, trả về lỗi
+            // Nếu token không hợp lệ hoặc hết hạn
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-
-        // Tiếp tục xử lý nếu token hợp lệ
+    
+        // Đặt người dùng vào Auth để có thể sử dụng trong controller
+        auth()->login($user);
+    
+        // Tiếp tục với yêu cầu
         return $next($request);
     }
+    
 }

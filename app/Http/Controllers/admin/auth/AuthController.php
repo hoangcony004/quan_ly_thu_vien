@@ -52,44 +52,33 @@ class AuthController extends Controller
         // Xử lý đăng nhập sau khi kiểm tra reCAPTCHA
         $credentials = $request->only('username', 'password');
     
+        // Kiểm tra nếu thông tin đăng nhập chính xác
         if (Auth::attempt($credentials)) {
-            // Lấy người dùng hiện tại
+            // Lấy thông tin người dùng sau khi đăng nhập thành công
             $user = Auth::user();
     
-            // Tạo JWT token cho người dùng
+            // Tạo JWT Token
             $token = JWTAuth::fromUser($user);
+
             // dd($token);die;
     
-            // Kiểm tra xem yêu cầu có phải từ API hay không
-            if ($request->wantsJson()) {
-                // Nếu yêu cầu từ API, trả về token
-                return response()->json([
-                    'message' => 'Đăng nhập thành công',
-                    'token' => $token
-                ]);
-            } else {
-                // Nếu yêu cầu từ giao diện web, lưu thông tin người dùng vào session và chuyển hướng
-                session(['name' => $user->name]);
-                session(['role' => $user->role]);
-                session(['image' => $user->image]);
+            // Lưu token vào session hoặc cookie nếu cần thiết
+            session(['name' => $user->name]);
+            session(['role' => $user->role]);
+            session(['image' => $user->image]);
+            session(['token' => $token]); // Lưu token vào session
     
-                // Thông báo thành công
-                $this->notificationService->addNotification('Đăng nhập thành công!', 'success');
+            // Sử dụng NotificationService để gửi thông báo cho đăng nhập thành công
+            $this->notificationService->addNotification('Đăng nhập thành công!', 'success');
     
-                // Chuyển hướng đến dashboard
-                return redirect()->intended(route('dashboard'));
-            }
+            // Chuyển hướng đến dashboard hoặc trang tiếp theo
+            return redirect()->intended(route('dashboard'));
         } else {
-            // Nếu đăng nhập không thành công
+            // Thông báo lỗi nếu thông tin đăng nhập không chính xác
             session()->flash('error', 'Sai tên đăng nhập hoặc mật khẩu!');
             return redirect()->back()->withInput();
         }
-    
-        // Nếu đăng nhập không thành công
-        session()->flash('error', 'Thông tin đăng nhập không đúng.'); // Thông báo lỗi
-        return redirect()->back()->withInput(); // Giữ lại các giá trị đã nhập
-    }
-    
+    }    
 
     public function getLogout()
     {
@@ -103,5 +92,19 @@ class AuthController extends Controller
         session()->flash('success', 'Đăng xuất thành công.');
 
         return redirect()->route('auth.getLogin'); // Chuyển hướng đến trang đăng nhập
+    }
+
+    public function getToken(Request $request)
+    {
+        // Kiểm tra nếu người dùng đã đăng nhập bằng session
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        // Tạo token JWT cho người dùng
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json(['token' => $token]);
     }
 }

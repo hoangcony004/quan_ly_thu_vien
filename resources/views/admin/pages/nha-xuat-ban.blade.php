@@ -66,7 +66,7 @@
                 <div class="table-responsive">
                     @if($nhaxuatbanList->isEmpty())
                     <br>
-                    <p style="display: flex; justify-content: center; font-size: 28px; color: red;">Không tìm thấy thể loại nào với tên ''.</p>
+                    <p style="display: flex; justify-content: center; font-size: 28px; color: red;">Không tìm thấy nhà xuất bản nào với tên '{{ $query }}'.</p>
                     @else
                     <table class="table table-striped">
                         <thead>

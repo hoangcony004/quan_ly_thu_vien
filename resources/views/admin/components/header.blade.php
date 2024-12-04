@@ -73,7 +73,7 @@
         });
     </script>
 
-    <ul class="nav navbar-top-links navbar-right d-flex justify-content-end">
+    <ul class="nav navbar-top-links navbar-right">
         <li>
             <span class="m-r-sm text-muted welcome-message">Xin chào: {{ auth()->user()->name }}</span>
         </li>
@@ -84,7 +84,7 @@
                 <span class="label label-primary"
                     id="notification-count">{{ count(session('notifications', [])) }}</span>
             </a>
-            <ul class="dropdown-menu dropdown-alerts">
+            <ul class="dropdown-menu dropdown-alerts dropdown-menu-right">
                 <li class="row">
                     <div class="col-6">
                         <h3>Thông báo</h3>
@@ -220,7 +220,7 @@
         }
 
         .navbar-top-links li {
-            margin-left: 7px;
+            margin-left: 10px;
             /* Khoảng cách giữa các mục */
         }
 

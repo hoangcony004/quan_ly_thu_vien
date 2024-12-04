@@ -43,9 +43,9 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/', [KhoSachController::class, 'getKhoSach'])->name('khosach.getKhoSach');
             Route::post('/post-add-sach', [KhoSachController::class, 'postAddSach'])->name('khosach.postAddSach');
             Route::get('/edit-sach/{id}', [KhoSachController::class, 'getEditSach'])->name('khosach.getEditSach');
-            Route::put('/edit-sach/{id}', [KhoSachController::class, 'postEditSach'])->name('PEditSach');
+            Route::put('/edit-sach/{id}', [KhoSachController::class, 'postEditSach'])->name('khosach.postEditSach');
             Route::post('/xoa-sach/{id}', [KhoSachController::class, 'postDeleteSach'])->name('khosach.postDeleteSach');
-            // Route::get('/search-sach', [KhoSachController::class, 'getBooks'])->name('searchSach');
+            Route::get('/tim-kiem-sach', [KhoSachController::class, 'getSearchSach'])->name('khosach.getSearchSach');
         });
         Route::group(['prefix' => '/tac-gia'], function () {
             Route::get('/', [TacGiaController::class, 'getTacGia'])->name('tacgia.getTacGia');
@@ -69,7 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/edit-nha-xuat-ban/{id}', [NhaXuatBanController::class, 'getEditNhaXuatBan'])->name('nhaxuatban.getEditNhaXuatBan');
             Route::put('/edit-nha-xuat-ban/{id}', [NhaXuatBanController::class, 'postEditNhaXuatBan'])->name('nhaxuatban.postEditNhaXuatBan');
             Route::post('/xoa-nha-xuat-ban/{id}', [NhaXuatBanController::class, 'postDeleteNhaXuatBan'])->name('nhaxuatban.postDeleteNhaXuatBan');
-            Route::get('/search-nha-xuat-ban', [NhaXuatBanController::class, 'getSearchNhaXuatBan'])->name('nhaxuatban.getSearchNhaXuatBan');
+            Route::get('/tim-kiem-nha-xuat-ban', [NhaXuatBanController::class, 'getSearchNhaXuatBan'])->name('nhaxuatban.getSearchNhaXuatBan');
         });
 
         Route::get('/tim-kiem-chuc-nang-he-thong', [SearchController::class, 'index'])->name('admin.Search');

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\TacGiaController;
 use App\Http\Controllers\admin\TheLoaiController;
 use App\Http\Controllers\admin\NhaXuatBanController;
+use App\Http\Controllers\admin\auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +18,14 @@ use App\Http\Controllers\admin\NhaXuatBanController;
 |
 */
 
+// Route::middleware('auth')->post('/get-token', [AuthController::class, 'getToken']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::middleware(['jwt.auth'])->group(function () {
+Route::middleware('jwt.auth')->group(function () {
     Route::get('/tac-gia', [TacGiaController::class, 'getAPITacGia']);
     Route::get('/the-loai', [TheLoaiController::class, 'getAPITheLoai']);
     Route::get('/nha-xuat-ban', [NhaXuatBanController::class, 'getAPINhaXuatBan']);
-// });
+});

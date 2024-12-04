@@ -103,7 +103,79 @@ class KhoSachController extends Controller
         return redirect()->route('khosach.getKhoSach');
     }
 
-    public function postDeleteSach($id) {
+    public function getEditSach($id)
+    {
+        // Khai báo title
+        $this->title = 'Admin - Sửa Sách';
+
+        // Tìm nhà xuất bản theo ID
+        $khosach = KhoSach::find($id);
+
+        // Chuyển hướng
+        return view('admin.partials.khosach.form-edit-sach', compact('khosach'))
+            ->with('title', $this->title);
+    }
+
+    public function postEditSach(Request $request, $id)
+    {
+        // Xác thức dữ liệu
+        $request->validate([
+            'tenSach' => 'required|string|max:255',
+            'maTacGia' => 'required|integer',
+            'maTheLoai' => 'required|integer',
+            'maNhaXuatBan' => 'required|integer',
+            'ngayXuatBan' => 'required|date',
+            'soLuong' => 'required|integer|min:1',
+            'moTa' => 'required|string|max:500',
+        ]);
+
+        // Tìm nhà xuất bản theo ID
+        $khosach = KhoSach::find($id);
+
+        // Cấu hình Cloudinary
+        Configuration::instance([
+            'cloud' => [
+                'cloud_name' => 'duwg8ygye',
+                'api_key' => '437687328334798',
+                'api_secret' => 'UVvthgt95W8FVlJmBZvMtZwIHRs',
+            ]
+        ]);
+
+        // Kiểm tra xem người dùng có tải ảnh lên hay không
+        $imageUrl = $khosach->image; // Mặc định giữ URL ảnh cũ
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image'); // Lấy file từ request
+            try {
+                // Tải ảnh lên Cloudinary
+                $upload = (new UploadApi())->upload($file->getPathname());
+                $imageUrl = $upload['secure_url']; // Lấy URL ảnh từ Cloudinary
+            } catch (\Exception $e) {
+                $this->notificationService->addNotification('Lỗi khi tải ảnh lên. Vui lòng thử lại!', 'error');
+                return back()->withInput();
+            }
+        }
+
+        // Cập nhật thống tin sách
+        $khosach->update([
+            'tenSach' => $request->tenSach,
+            'maTacGia' => $request->maTacGia,
+            'maTheLoai' => $request->maTheLoai,
+            'maNhaXuatBan' => $request->maNhaXuatBan,
+            'ngayXuatBan' => $request->ngayXuatBan,
+            'soLuong' => $request->soLuong,
+            'moTa' => $request->moTa,
+            'image' => $imageUrl, // Đường dẫn ảnh Imgur
+        ]);
+
+        // Thêm thông báo thành công vào session
+        $this->notificationService->addNotification('Sách được cập nhật thống công!', 'success');
+
+        return redirect()->route('khosach.getKhoSach');
+    }
+
+    public function postDeleteSach($id)
+    {
         // Tìm nhà xuất bản theo ID
         $khosach = KhoSach::find($id);
 
@@ -120,6 +192,26 @@ class KhoSachController extends Controller
         }
 
         return redirect()->route('khosach.getKhoSach');
+    }
+
+    public function getSearchSach(Request $request)
+    {
+        // Khai báo title
+        $this->title = 'Admin - Tìm Kiếm Nhà Xuất Bản';
+
+        $filter = $request->input('filter');
+        $query = $request->input('query');
+    
+        if ($filter === 'maSach') {
+            $khoSachList = KhoSach::where('maSach', 'LIKE', "%$query%")->paginate(5);
+        } elseif ($filter === 'tenSach') {
+            $khoSachList = KhoSach::where('tenSach', 'LIKE', "%$query%")->paginate(5);
+        }
+
+        return view('admin.pages.kho-sach')
+            ->with('title', $this->title)
+            ->with('khoSachList', $khoSachList)
+            ->with('query', $query);
     }
 
 

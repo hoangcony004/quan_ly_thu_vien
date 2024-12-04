@@ -60,14 +60,24 @@
         </li>
 
         <li>
-            <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Menu Levels </span><span
+            <a href="#"><i class="fa fa-bars"></i> <span class="nav-label">Quản Lý Mượn Sách</span><span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level collapse">
+                <li><a href="basic_gallery.html">Lightbox Gallery</a></li>
+                <li><a href="slick_carousel.html">Slick Carousel</a></li>
+                <li><a href="carousel.html">Bootstrap Carousel</a></li>
+
+            </ul>
+        </li>
+
+        <li>
+            <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Cài Đặt </span><span
                     class="fa arrow"></span></a>
             <ul class="nav nav-second-level collapse">
                 <li>
-                    <a href="#">Third Level <span class="fa arrow"></span></a>
+                    <a href="#">Quản Lý Hệ Thống<span class="fa arrow"></span></a>
                     <ul class="nav nav-third-level">
                         <li>
-                            <a href="#">Third Level Item</a>
+                            <a href="">Quản Lý </a>
                         </li>
                         <li>
                             <a href="#">Third Level Item</a>

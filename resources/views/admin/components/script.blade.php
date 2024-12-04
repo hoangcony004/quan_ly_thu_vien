@@ -42,6 +42,9 @@
 
 <script src="{{ asset('js/plugins/switchery/switchery.js') }}"></script>
 
+<!-- blueimp gallery -->
+<!-- <script src="{{ asset('js/plugins/blueimp/jquery.blueimp-gallery.min.js') }}"></script> -->
+
 @if(session('toast_message'))
 <div id="toast-message" data-message="{{ session('toast_message') }}" data-type="{{ session('toast_type') }}"
     style="display: none;">

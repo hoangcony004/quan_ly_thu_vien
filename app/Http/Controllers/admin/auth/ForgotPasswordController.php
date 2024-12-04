@@ -51,10 +51,12 @@ class ForgotPasswordController extends Controller
         );
 
         // Gửi email
-        $link = url('/reset-password/' . $token);
-        Mail::send('admin.auth.password-reset', ['link' => $link], function ($message) use ($request) {
-            $message->to($request->email);
-            $message->subject('Reset Password');
+        $link = url('/reset-password/'.$token.'?email='.urlencode($request->email));
+        Mail::send('admin.auth.password-reset', [
+            'link' => $link
+        ], function ($message) use ($request) {
+            $message->to($request->email)
+                ->subject('Reset Password');
         });
 
         return back()->with('success', 'Đã gửi email xác minh thành công!');
@@ -65,6 +67,18 @@ class ForgotPasswordController extends Controller
     {
         // Khai báo title
         $this->title = 'Admin - Reset Password';
+
+        $email = request()->query('email'); 
+
+        // Kiểm tra xem token có tồn tại trong database không
+        $emailRecord = DB::table('password_reset_tokens')->where('email', $email)->first();
+
+        if (!$emailRecord) {
+            // Nếu token không tồn tại, trả về view lỗi
+            return view('admin.auth.error-reset-password')
+                ->with('message', 'Token không hợp lệ hoặc đã hết hạn. Vui Lòng Thử Lại Sau.')
+                ->with('title', $this->title);
+        }
 
         return view('admin.auth.reset-password', ['token' => $token])
             ->with('title', $this->title);

@@ -1,9 +1,4 @@
 <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
-    <!-- CSS Select2 -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-    <!-- JS Select2 -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -81,6 +76,16 @@
 
 <script>
     $('#myModal5').on('shown.bs.modal', function() {
+        var token = document.querySelector('meta[name="jwt-token"]').getAttribute('content');
+        // console.log('Token:', token);
+
+        // Kiểm tra token hợp lệ
+        if (token && token.split('.').length === 3) {
+            console.log('Valid JWT token');
+        } else {
+            console.error('Invalid JWT token');
+        }
+
         // Select2 cho Tác Giả
         $('#selectTacGia').select2({
             placeholder: "Chọn tác giả",
@@ -91,8 +96,8 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        search: params.term
-                    }; // Term tìm kiếm
+                        search: params.term // Term tìm kiếm
+                    };
                 },
                 processResults: function(data) {
                     return {
@@ -102,7 +107,10 @@
                         }))
                     };
                 },
-                cache: true
+                cache: true,
+                headers: {
+                    Authorization: `Bearer ${token}` // Thêm token vào header
+                }
             }
         });
 
@@ -116,8 +124,8 @@
                 delay: 250,
                 data: function(params) {
                     return {
-                        search: params.term
-                    }; // Term tìm kiếm
+                        search: params.term // Term tìm kiếm
+                    };
                 },
                 processResults: function(data) {
                     return {
@@ -127,10 +135,14 @@
                         }))
                     };
                 },
-                cache: true
+                cache: true,
+                headers: {
+                    Authorization: `Bearer ${token}` // Thêm token vào header
+                }
             }
         });
 
+        // Select2 cho Nhà Xuất Bản
         $('#selectNhaXuatBan').select2({
             placeholder: "Chọn nhà xuất bản",
             dropdownParent: $('#myModal5 .modal-content'),
@@ -153,18 +165,9 @@
                 },
                 cache: true,
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token') // Gửi token từ localStorage
+                    Authorization: `Bearer ${token}` // Thêm token vào header
                 }
-
             }
         });
-
-        var token = localStorage.getItem('token');
-        if (token && token.split('.').length === 3) {
-            console.log('Valid JWT token');
-        } else {
-            console.error('Invalid JWT token');
-        }
-
     });
 </script>

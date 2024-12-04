@@ -51,7 +51,13 @@
                     <div class="col-sm-4 m-b-xs">
                     </div>
                     <div class="col-sm-3">
-                        <form action="" method="get">
+                        <form action="{{ route('khosach.getSearchSach') }}" method="get">
+                            <div class="">
+                                <select name="filter" id="filter">
+                                    <option value="maSach">Mã Sách</option>
+                                    <option value="tenSach">Tên Sách</option>
+                                </select>
+                            </div>
                             <div class="input-group">
                                 <input type="search" name="query" placeholder="Tìm kiếm..."
                                     class="input-sm form-control">
@@ -61,12 +67,13 @@
                                 </span>
                             </div>
                         </form>
-                    </div><br>
+                    </div>
+                    <br>
                 </div>
                 <div class="table-responsive">
                     @if($khoSachList->isEmpty())
                     <br>
-                    <p style="display: flex; justify-content: center; font-size: 28px; color: red;">Không tìm thấy thể loại nào với tên '{{ $query }}'.</p>
+                    <p style="display: flex; justify-content: center; font-size: 28px; color: red;">Không tìm thấy sách nào với thông tin '{{ $query }}'.</p>
                     @else
                     <table class="table table-striped">
                         <thead>
@@ -78,6 +85,7 @@
                                 <th>Tác Giả</th>
                                 <th>Nhà Xuất Bản</th>
                                 <th>Thể Loại</th>
+                                <th>Số Lượng</th>
                                 <th>Mô Tả</th>
                             </tr>
                         </thead>
@@ -88,15 +96,19 @@
                                 <td>{{ $khoSachList->firstItem() + $index }}</td>
 
                                 <!-- Cột Mã Sách -->
-                                <td>{{ $khosach->maSach }}</td>
+                                <td id="maSach" onclick="copyToClipboard(this)" style="cursor: copy;"><i class="fa fa-copy"></i> {{ $khosach->maSach }}</td>
 
                                 <!-- Cột Tên Sách -->
                                 <td>{{ $khosach->tenSach }}</td>
 
                                 <!-- Cót Hình Ảnh -->
                                 <td>
-                                    <img src="{{ $khosach->image }}" alt="Không Có Ảnh"
-                                        style="max-width: 80px; max-height: 80px;">
+                                    <!-- <img src="{{ $khosach->image }}" alt="Không Có Ảnh"
+                                        style="max-width: 80px; max-height: 80px;"> -->
+                                    <a href="{{ $khosach->image }}" title="Image from Unsplash" data-gallery="">
+                                        <img src="{{ $khosach->image }}" style="width: 100px;">
+                                    </a>
+
                                 </td>
 
                                 <!-- Cột Tác Giả -->
@@ -107,6 +119,9 @@
 
                                 <!-- Cột Thể Loại -->
                                 <td>{{ $khosach->theLoai->tenTheLoai }}</td>
+
+                                <!-- Cót Số Lượng -->
+                                <td>{{ $khosach->soLuong }}</td>
 
                                 <!-- Cột Mô Tả -->
                                 <td>{{ \Illuminate\Support\Str::limit($khosach->moTa, 50) }}</td>
@@ -151,4 +166,23 @@
     @include('admin.partials.khosach.form-delete-sach')
 
 </div>
+
+<script>
+    function copyToClipboard(element) {
+        // Tạo một textarea ẩn để copy giá trị
+        var textArea = document.createElement("textarea");
+        textArea.value = element.textContent || element.innerText; // Lấy giá trị của thẻ td
+        document.body.appendChild(textArea);
+
+        // Chọn và sao chép giá trị
+        textArea.select();
+        document.execCommand("copy");
+
+        // Xóa textarea sau khi copy xong
+        document.body.removeChild(textArea);
+
+        // Hiển thị thông báo cho người dùng (có thể thay đổi thông báo theo ý thích)
+        alert("Mã sách đã được sao chép và lưu vào bộ nhớ đệm: " + textArea.value);
+    }
+</script>
 @endsection

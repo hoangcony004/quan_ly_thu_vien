@@ -11,7 +11,11 @@
 
     <div>
         <h1>Trang Chủ</h1>
-        <a href="http://laravel-app:8000/public/admin/dashboard">Vào Trang Admin</a>
+        @if(auth()->user()->role == 1)
+        <a href="http://127.0.0.1:8000/public/admin/dashboard">Vào Trang Admin</a>
+        @else
+        @endif
+
     </div>
 </body>
 

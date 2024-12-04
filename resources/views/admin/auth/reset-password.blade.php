@@ -109,9 +109,9 @@
                                     document.getElementById('passwordError').textContent =
                                         'Mật khẩu không được để trống.';
                                     isValid = false;
-                                } else if (password.length < 6) {
+                                } else if (password.length < 8) {
                                     document.getElementById('passwordError').textContent =
-                                        'Mật khẩu phải có ít nhất 6 ký tự.';
+                                        'Mật khẩu phải có ít nhất 8 ký tự.';
                                     isValid = false;
                                 }
 
