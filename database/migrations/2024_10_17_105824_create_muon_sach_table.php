@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('maMuonSach')->unique();
             $table->string('tenNguoiMuon');
+            $table->string('soDienThoai')->unique()->nullable();
+            $table->string('email')->unique()->nullable();
             $table->integer('soLuong');
             $table->date('ngayMuon');
             $table->date('ngayTra')->nullable();

@@ -62,7 +62,7 @@
         <li>
             <a href="#"><i class="fa fa-bars"></i> <span class="nav-label">Quản Lý Mượn Sách</span><span class="fa arrow"></span></a>
             <ul class="nav nav-second-level collapse">
-                <li><a href="basic_gallery.html">Lightbox Gallery</a></li>
+                <li><a href="{{ route('quanlymuonsach.getQuanLyMuonSach') }}">Đang Mượn Sách</a></li>   
                 <li><a href="slick_carousel.html">Slick Carousel</a></li>
                 <li><a href="carousel.html">Bootstrap Carousel</a></li>
 

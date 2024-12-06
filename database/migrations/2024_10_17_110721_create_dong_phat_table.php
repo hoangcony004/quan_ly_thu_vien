@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('maMuon')->constrained('muon_sach');
             $table->decimal('soTienPhat', 10, 2);
             $table->enum('trangThai', ['0', '1']);
+            $table->integer('soNgayQuaHan');
             $table->date('ngayPhat');
             $table->string('moTa');
             $table->timestamps();

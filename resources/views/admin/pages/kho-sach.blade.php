@@ -52,14 +52,8 @@
                     </div>
                     <div class="col-sm-3">
                         <form action="{{ route('khosach.getSearchSach') }}" method="get">
-                            <div class="">
-                                <select name="filter" id="filter">
-                                    <option value="maSach">Mã Sách</option>
-                                    <option value="tenSach">Tên Sách</option>
-                                </select>
-                            </div>
                             <div class="input-group">
-                                <input type="search" name="query" placeholder="Tìm kiếm..."
+                                <input type="search" name="query" placeholder="Nhập mã sách..."
                                     class="input-sm form-control">
                                 <span class="input-group-btn">
                                     <button type="submit" class="btn btn-sm btn-primary"><i

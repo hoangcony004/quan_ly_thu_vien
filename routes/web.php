@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\TheLoaiController;
 use App\Http\Controllers\admin\NhaXuatBanController;
 use App\Http\Controllers\admin\KhoSachController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\admin\QuanLyMuonSachController;
 
 
 /*
@@ -70,6 +71,14 @@ Route::group(['middleware' => ['auth']], function () {
             Route::put('/edit-nha-xuat-ban/{id}', [NhaXuatBanController::class, 'postEditNhaXuatBan'])->name('nhaxuatban.postEditNhaXuatBan');
             Route::post('/xoa-nha-xuat-ban/{id}', [NhaXuatBanController::class, 'postDeleteNhaXuatBan'])->name('nhaxuatban.postDeleteNhaXuatBan');
             Route::get('/tim-kiem-nha-xuat-ban', [NhaXuatBanController::class, 'getSearchNhaXuatBan'])->name('nhaxuatban.getSearchNhaXuatBan');
+        });
+
+        Route::group(['prefix' => '/quan-ly-muon-sach'], function () {
+            Route::get('/', [QuanLyMuonSachController::class, 'getQuanLyMuonSach'])->name('quanlymuonsach.getQuanLyMuonSach');
+            Route::post('/add-muon-sach', [QuanLyMuonSachController::class, 'postAddMuonSach'])->name('quanlymuonsach.postAddMuonSach');
+            Route::get('/edit-muon-sach/{id}', [QuanLyMuonSachController::class, 'getEditMuonSach'])->name('quanlymuonsach.getEditMuonSach');
+            Route::put('/edit-muon-sach/{id}', [QuanLyMuonSachController::class, 'postEditMuonSach'])->name('quanlymuonsach.postEditMuonSach');
+            Route::post('/xoa-muon-sach/{id}', [QuanLyMuonSachController::class, 'postDeleteMuonSach'])->name('quanlymuonsach.postDeleteMuonSach');
         });
 
         Route::get('/tim-kiem-chuc-nang-he-thong', [SearchController::class, 'index'])->name('admin.Search');

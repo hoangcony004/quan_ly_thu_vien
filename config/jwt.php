@@ -261,7 +261,7 @@ return [
     |
     */
     'secret' => env('JWT_SECRET'),
-    'ttl' => 60, // thời gian sống của token, có thể chỉnh sửa tùy theo nhu cầu
+    'ttl' => 120, // thời gian sống của token, có thể chỉnh sửa tùy theo nhu cầu
     'algo' => env('JWT_ALGO', 'HS256'),
 
 

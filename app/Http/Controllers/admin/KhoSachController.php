@@ -199,14 +199,11 @@ class KhoSachController extends Controller
         // Khai báo title
         $this->title = 'Admin - Tìm Kiếm Nhà Xuất Bản';
 
-        $filter = $request->input('filter');
         $query = $request->input('query');
-    
-        if ($filter === 'maSach') {
-            $khoSachList = KhoSach::where('maSach', 'LIKE', "%$query%")->paginate(5);
-        } elseif ($filter === 'tenSach') {
-            $khoSachList = KhoSach::where('tenSach', 'LIKE', "%$query%")->paginate(5);
-        }
+
+        $khoSachList = KhoSach::where('maSach', 'LIKE', "%$query%")->paginate(5);
+
+        $this->notificationService->addNotification('Tìm kiếm sách thành công!', 'success');
 
         return view('admin.pages.kho-sach')
             ->with('title', $this->title)

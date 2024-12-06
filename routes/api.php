@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\TacGiaController;
 use App\Http\Controllers\admin\TheLoaiController;
 use App\Http\Controllers\admin\NhaXuatBanController;
-use App\Http\Controllers\admin\auth\AuthController;
+use App\Http\Controllers\admin\QuanLyMuonSachController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +28,9 @@ Route::middleware('jwt.auth')->group(function () {
     Route::get('/tac-gia', [TacGiaController::class, 'getAPITacGia']);
     Route::get('/the-loai', [TheLoaiController::class, 'getAPITheLoai']);
     Route::get('/nha-xuat-ban', [NhaXuatBanController::class, 'getAPINhaXuatBan']);
+
+    Route::get('/muon-sach', [QuanLyMuonSachController::class, 'getAPIMuonSach']);
+
+    Route::get('/muon-sach/show/{id}', [QuanLyMuonSachController::class, 'getMuonSachDetailApi']);
+
 });
