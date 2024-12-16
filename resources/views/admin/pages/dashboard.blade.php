@@ -280,7 +280,7 @@
             <div class="col-lg-6">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Small todo list</h5>
+                        <h5>Trạng Thái Mượn Sách</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -291,40 +291,9 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <ul class="todo-list m-t small-list">
-                            <li>
-                                <a href="#" class="check-link"><i class="fa fa-check-square"></i> </a>
-                                <span class="m-l-xs todo-completed">Buy a milk</span>
-
-                            </li>
-                            <li>
-                                <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                <span class="m-l-xs">Go to shop and find some products.</span>
-
-                            </li>
-                            <li>
-                                <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                <span class="m-l-xs">Send documents to Mike</span>
-                                <small class="label label-primary"><i class="fa fa-clock-o"></i> 1
-                                    mins</small>
-                            </li>
-                            <li>
-                                <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                <span class="m-l-xs">Go to the doctor dr Smith</span>
-                            </li>
-                            <li>
-                                <a href="#" class="check-link"><i class="fa fa-check-square"></i> </a>
-                                <span class="m-l-xs todo-completed">Plan vacation</span>
-                            </li>
-                            <li>
-                                <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                <span class="m-l-xs">Create new stuff</span>
-                            </li>
-                            <li>
-                                <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                <span class="m-l-xs">Call to Anna for dinner</span>
-                            </li>
-                        </ul>
+                        <div>
+                            <div id="pie-ti-le-trang-thai-muon-sach"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -345,78 +314,86 @@
                     </div>
                     <div class="ibox-content">
 
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <table class="table table-hover margin bottom">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 1%" class="text-center">No.</th>
-                                            <th>Transaction</th>
-                                            <th class="text-center">Date</th>
-                                            <th class="text-center">Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td> Security doors
-                                            </td>
-                                            <td class="text-center small">16 Jun 2014</td>
-                                            <td class="text-center"><span class="label label-primary">$483.00</span>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">2</td>
-                                            <td> Wardrobes
-                                            </td>
-                                            <td class="text-center small">10 Jun 2014</td>
-                                            <td class="text-center"><span class="label label-primary">$327.00</span>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">3</td>
-                                            <td> Set of tools
-                                            </td>
-                                            <td class="text-center small">12 Jun 2014</td>
-                                            <td class="text-center"><span class="label label-warning">$125.00</span>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">4</td>
-                                            <td> Panoramic pictures</td>
-                                            <td class="text-center small">22 Jun 2013</td>
-                                            <td class="text-center"><span class="label label-primary">$344.00</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">5</td>
-                                            <td>Phones</td>
-                                            <td class="text-center small">24 Jun 2013</td>
-                                            <td class="text-center"><span class="label label-primary">$235.00</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">6</td>
-                                            <td>Monitors</td>
-                                            <td class="text-center small">26 Jun 2013</td>
-                                            <td class="text-center"><span class="label label-primary">$100.00</span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-lg-6">
-                                <div id="world-map" style="height: 300px;"></div>
-                            </div>
-                        </div>
+                        <div id="stocked"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        // Token dùng để xác thực API
+        var token = document.querySelector('meta[name="jwt-token"]').getAttribute('content');
+
+        // Ánh xạ trạng thái từ số sang tên trạng thái
+        const trangThaiMapping = {
+            '1': 'Đang mượn',
+            '2': 'Đã trả',
+            '3': 'Quá hạn',
+            '4': 'Đang xử lý',
+            '5': 'Hủy'
+        };
+
+        // Gọi API lấy dữ liệu
+        $.ajax({
+            url: '/api/muon-sach/status', // Thay URL bằng URL thực tế
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}` // Thêm token vào header
+            },
+            dataType: 'json',
+            success: function(data) {
+                // Xử lý dữ liệu: ánh xạ trạng thái và chuyển thành định dạng biểu đồ
+                const columns = data.map(item => [
+                    trangThaiMapping[item.trangThai] || 'Không xác định', // Ánh xạ trạng thái
+                    item.count
+                ]);
+
+                const colors = {
+                    'Đang mượn': '#1ab394',
+                    'Đã trả': '#BABABA',
+                    'Quá hạn': '#f8ac59',
+                    'Đang xử lý': '#5a5aad',
+                    'Hủy': '#ed5565',
+                    'Không xác định': '#d3d3d3'
+                };
+
+                // Tạo biểu đồ
+                c3.generate({
+                    bindto: '#pie-ti-le-trang-thai-muon-sach',
+                    data: {
+                        columns: columns,
+                        colors: colors,
+                        type: 'pie'
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Lỗi khi gọi API:", error);
+            }
+        });
+
+        c3.generate({
+            bindto: '#stocked',
+            data: {
+                columns: [
+                    ['data1', 30, 200, 100, 400, 150, 250, 1000, 1500, 2000, 1220, 1500, 1800]  ,
+                ],
+                colors: {
+                    data1: '#1ab394'
+                },
+                type: 'bar',
+                groups: [
+                    ['data1']
+                ]
+            }
+        });
+    });
+</script>
+
+
+
 
 @endsection

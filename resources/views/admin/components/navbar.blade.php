@@ -59,15 +59,41 @@
             </ul>
         </li>
 
-        <li>
+        <li class="{{ \App\Helpers\Helper::isActiveGroup([
+        'quanlymuonsach.getQuanLyMuonSach',
+        'quanlymuonsach.postAddMuonSach',
+        'quanlymuonsach.getEditMuonSach',
+        'quanlymuonsach.postEditMuonSach',
+        'quanlymuonsach.postDeleteMuonSach'
+    ]) }}">
             <a href="#"><i class="fa fa-bars"></i> <span class="nav-label">Quản Lý Mượn Sách</span><span class="fa arrow"></span></a>
             <ul class="nav nav-second-level collapse">
-                <li><a href="{{ route('quanlymuonsach.getQuanLyMuonSach') }}">Đang Mượn Sách</a></li>   
-                <li><a href="slick_carousel.html">Slick Carousel</a></li>
-                <li><a href="carousel.html">Bootstrap Carousel</a></li>
-
+                <li class="{{ \App\Helpers\Helper::isActiveRoute('quanlymuonsach.getQuanLyMuonSach') }}">
+                    <a href="{{ route('quanlymuonsach.getQuanLyMuonSach') }}">Tất Cả</a>
+                </li>
+                <li>
+                    <a href="#">Trạng Thái Mượn Sách<span class="fa arrow"></span></a>
+                    <ul class="nav nav-third-level">
+                        <li>
+                            <a href="">Đang Mượn</a>
+                        </li>
+                        <li>
+                            <a href="#">Đã Trả</a>
+                        </li>
+                        <li>
+                            <a href="#">Quá Hạn Trả</a>
+                        </li>
+                        <li>
+                            <a href="#">Đang Xử Lý</a>
+                        </li>
+                        <li>
+                            <a href="#">Đã Hủy</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </li>
+
 
         <li>
             <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Cài Đặt </span><span

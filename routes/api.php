@@ -32,5 +32,7 @@ Route::middleware('jwt.auth')->group(function () {
     Route::get('/muon-sach', [QuanLyMuonSachController::class, 'getAPIMuonSach']);
 
     Route::get('/muon-sach/show/{id}', [QuanLyMuonSachController::class, 'getMuonSachDetailApi']);
+    Route::get('muon-sach/status', [QuanLyMuonSachController::class, 'getStatusAPIData']);
+
 
 });

@@ -27,3 +27,6 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <link href="{{ asset('css/plugins/blueimp/css/blueimp-gallery.min.css') }}" rel="stylesheet">
+
+<!-- c3 Charts -->
+<link href="{{ asset('css/plugins/c3/c3.min.css') }}" rel="stylesheet">

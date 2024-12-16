@@ -24,11 +24,15 @@ class QuanLyMuonSachController extends Controller
         $this->notificationService = $notificationService;
     }
 
-    public function getQuanLyMuonSach()
+    public function getQuanLyDangMuonSach()
     {
         $this->title = 'Admin - Quản Lý Mượn Sách';
 
-        $muonSachList = MuonSach::paginate(5);
+        // Lọc danh sách với điều kiện trangThai = 1
+        // và sắp xếp theo ngày tạo mới nhất
+        // $muonSachList = MuonSach::where('trangThai', 1)
+        $muonSachList = MuonSach::orderBy('created_at', 'desc') // Sắp xếp giảm dần theo `created_at`
+            ->paginate(5);
 
         $query = null;
 
@@ -37,6 +41,8 @@ class QuanLyMuonSachController extends Controller
             ->with('muonSachList', $muonSachList)
             ->with('query', $query);
     }
+
+
 
     public function postAddMuonSach(Request $request)
     {
@@ -48,8 +54,8 @@ class QuanLyMuonSachController extends Controller
             'soLuongSach.*' => 'required|integer|min:1|max:10',
             'tenNguoiMuon' => 'required|string|max:255',
             'soLuong' => 'required|integer|min:1',
-            'email' => 'required|email',
-            'soDienThoai' => 'required|digits_between:1,12',
+            // 'email' => 'email',
+            // 'soDienThoai' => 'digits_between:1,12',
             'ngayMuon' => 'required|date|before_or_equal:today',
             'ngayTra' => 'required|date|after_or_equal:ngayMuon',
         ]);
@@ -99,6 +105,23 @@ class QuanLyMuonSachController extends Controller
             return redirect()->back()->withErrors(['error' => 'Đã xảy ra lỗi khi thêm thông tin mượn sách. Vui lòng thử lại sau.']);
         }
     }
+
+    public function getEditMuonSach($id)
+    {
+        $this->title = 'Admin - Chỉnh Sửa Người Mượn Sách';
+
+        $quanlymuonsach = MuonSach::with(['details'])->find($id);
+
+        if (!$quanlymuonsach) {
+            return redirect()->back()->with('error', 'Không tìm thấy thông tin mượn sách.');
+        }
+
+        return view('admin.partials.quanlymuonsach.form-edit-muon-sach', [
+            'title' => $this->title,
+            'quanlymuonsach' => $quanlymuonsach,
+        ]);
+    }
+
 
 
     public function postDeleteMuonSach($id)
@@ -157,18 +180,28 @@ class QuanLyMuonSachController extends Controller
         }
     }
 
+    public function getStatusAPIData()
+    {
+        $data_TrangThai = DB::table('muon_sach')
+            ->select('trangThai', DB::raw('COUNT(*) as count'))
+            ->groupBy('trangThai')
+            ->get();
+
+        return response()->json($data_TrangThai);
+    }
+
     public function getMuonSachDetailApi($id)
     {
         // Sử dụng đúng tên quan hệ 'details' thay vì 'chiTietMuonSach'
         $thongTinMuonSach = MuonSach::with(['details.sach'])->find($id);
-    
+
         if (!$thongTinMuonSach) {
             return response()->json([
                 'success' => false,
                 'message' => 'Không tìm thấy thông tin mượn sách.',
             ], 404);
         }
-    
+
         return response()->json([
             'success' => true,
             'data' => $thongTinMuonSach,

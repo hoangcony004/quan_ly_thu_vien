@@ -18,23 +18,19 @@
 <script>
     $(document).ready(function() {
         $('.btn-view').on('click', function() {
-            var id = $(this).data('id'); // Lấy ID của bản ghi
-
-            // Lấy token từ localStorage hoặc sessionStorage
+            var id = $(this).data('id');
             var token = document.querySelector('meta[name="jwt-token"]').getAttribute('content');
 
-            // Gọi API để lấy dữ liệu với token trong header
             fetch('/api/muon-sach/show/' + id, {
-                method: 'GET', // Phương thức GET
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token // Thêm token vào header Authorization
-                }
-            })
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Hiển thị dữ liệu trong modal
                         let muonSach = data.data;
 
                         // Kiểm tra và chuyển trangThai sang kiểu số (nếu nó là chuỗi)
@@ -44,9 +40,9 @@
                         let trangThaiDescription = '';
                         let trangThaiClass = '';
 
-                        switch(trangThaiValue) {
+                        switch (trangThaiValue) {
                             case 1:
-                                trangThaiDescription = "Đã Mượn";
+                                trangThaiDescription = "Đang Mượn";
                                 trangThaiClass = "text-success"; // Màu xanh cho trạng thái "Đã Mượn"
                                 break;
                             case 2:
@@ -58,7 +54,7 @@
                                 trangThaiClass = "text-danger"; // Màu đỏ cho trạng thái "Quá Hạn"
                                 break;
                             case 4:
-                                trangThaiDescription = "Chưa Nghĩa Ra";
+                                trangThaiDescription = "Đang Xử Lý";
                                 trangThaiClass = "text-warning"; // Màu vàng cho trạng thái "Chưa Nghĩa Ra"
                                 break;
                             case 5:
@@ -70,53 +66,93 @@
                                 trangThaiClass = "text-secondary"; // Màu xám cho trạng thái "Không xác định"
                         }
 
+                        // Tạo HTML ban đầu
                         let html = `
                         <div class="row">
-                            <!-- Thông Tin Người Mượn -->
                             <div class="col-md-4">
                                 <h3>Thông Tin Người Mượn</h3>
                                 <p><strong>Tên:</strong> ${muonSach.tenNguoiMuon}</p>
-                                <p><strong>Email:</strong> ${muonSach.email}</p>
-                                <p><strong>Số Điện Thoại:</strong> ${muonSach.soDienThoai}</p>
+                                <p><strong>Email:</strong> ${muonSach.email ? muonSach.email : 'Chưa cập nhật'}</p>
+                                <p><strong>Số Điện Thoại:</strong> ${muonSach.soDienThoai ? muonSach.soDienThoai : 'Chưa cập nhật'}</p>
                                 <p><strong>Ngày Mượn:</strong> ${muonSach.ngayMuon}</p>
                                 <p><strong>Ngày Trả:</strong> ${muonSach.ngayTra}</p>
                                 <p><strong>Trạng Thái:</strong> <span class="${trangThaiClass}">${trangThaiDescription}</span></p>
                             </div>
 
-                            <!-- Chi Tiết Sách Mượn -->
                             <div class="col-md-8">
                                 <h3>Chi Tiết Sách Mượn</h3>
                                 <table class="table">
                                     <thead>
                                         <tr>
                                             <th>STT</th>
+                                            <th>Ảnh</th>
                                             <th>Tên Sách</th>
                                             <th>Số Lượng</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                        `;
+                                    <tbody id="bookDetails">
+                                        <!-- Nội dung phân trang sẽ chèn vào đây -->
+                                    </tbody>
+                                </table>
+                                <div id="pagination" class="text-center">
+                                    <!-- Nút phân trang sẽ chèn vào đây -->
+                                </div>
+                            </div>
+                        </div>
+                    `;
 
-                        // Duyệt qua các chi tiết sách mượn
-                        muonSach.details.forEach((item, index) => {
-                            html += `
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td>${item.sach.tenSach}</td>
-                                <td>${item.soLuong}</td>
-                            </tr>
-                        `;
+                        $('#modalContent').html(html);
+
+                        // Xử lý phân trang
+                        const details = muonSach.details; // Danh sách sách
+                        const itemsPerPage = 5;
+                        let currentPage = 1;
+
+                        function renderTable(page) {
+                            const start = (page - 1) * itemsPerPage;
+                            const end = start + itemsPerPage;
+                            const items = details.slice(start, end);
+
+                            let tableHtml = '';
+                            items.forEach((item, index) => {
+                                tableHtml += `
+                                <tr>
+                                    <td>${start + index + 1}</td>
+                                    <td><img src="${item.sach.image}" alt="${item.sach.tenSach}" width="50"></td>
+                                    <td>${item.sach.tenSach}</td>
+                                    <td>${item.soLuong}</td>
+                                </tr>
+                            `;
+                            });
+
+                            $('#bookDetails').html(tableHtml);
+                        }
+
+                        function renderPagination() {
+                            const totalPages = Math.ceil(details.length / itemsPerPage);
+                            let paginationHtml = '';
+
+                            for (let i = 1; i <= totalPages; i++) {
+                                paginationHtml += `
+                                <button class="btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-default'}" data-page="${i}">
+                                    ${i}
+                                </button>
+                            `;
+                            }
+
+                            $('#pagination').html(paginationHtml);
+                        }
+
+                        // Gắn sự kiện click vào nút phân trang
+                        $('#pagination').on('click', 'button', function() {
+                            currentPage = parseInt($(this).data('page'));
+                            renderTable(currentPage);
+                            renderPagination();
                         });
 
-                        html += `
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                `;
-
-                        // Gắn HTML vào modal
-                        $('#modalContent').html(html);
+                        // Hiển thị dữ liệu ban đầu
+                        renderTable(currentPage);
+                        renderPagination();
 
                         // Hiển thị modal
                         $('#viewMuonSachModal').modal('show');
@@ -131,6 +167,3 @@
         });
     });
 </script>
-
-
-

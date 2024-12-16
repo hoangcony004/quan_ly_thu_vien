@@ -74,7 +74,7 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         Route::group(['prefix' => '/quan-ly-muon-sach'], function () {
-            Route::get('/', [QuanLyMuonSachController::class, 'getQuanLyMuonSach'])->name('quanlymuonsach.getQuanLyMuonSach');
+            Route::get('/dang-muon-sach', [QuanLyMuonSachController::class, 'getQuanLyDangMuonSach'])->name('quanlymuonsach.getQuanLyMuonSach');
             Route::post('/add-muon-sach', [QuanLyMuonSachController::class, 'postAddMuonSach'])->name('quanlymuonsach.postAddMuonSach');
             Route::get('/edit-muon-sach/{id}', [QuanLyMuonSachController::class, 'getEditMuonSach'])->name('quanlymuonsach.getEditMuonSach');
             Route::put('/edit-muon-sach/{id}', [QuanLyMuonSachController::class, 'postEditMuonSach'])->name('quanlymuonsach.postEditMuonSach');

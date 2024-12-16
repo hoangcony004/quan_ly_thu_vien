@@ -17,14 +17,14 @@
                                 placeholder="Nhập tên người mượn..." value="{{ old('tenNguoiMuon') }}" autofocus>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Tổng Số Lượng</label>
+                            <label class="form-label">Tổng Số Loại Sách</label>
                             <input
                                 type="number"
                                 class="form-control"
                                 id="inputSoLuong"
                                 name="soLuong"
                                 required
-                                placeholder="Nhập tổng số lượng (Không quá 10)..."
+                                placeholder="Nhập tổng số loại sách (Không quá 10)..."
                                 value="{{ old('soLuong', 1) }}"
                                 min="1"
                                 max="10">
@@ -36,7 +36,7 @@
                     <div class="row g-3 align-items-center">
                         <div class="col-md-6">
                             <label for="inputNgaySinh" class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" id="inputName" required
+                            <input type="email" class="form-control" name="email" id="inputName"
                                 placeholder="Nhập email..." value="{{ old('email') }}">
                         </div>
                         <div class="col-md-6">
@@ -52,7 +52,8 @@
                         <div class="col-md-6">
                             <label for="inputNgaySinh" class="form-label">Ngày Mượn</label>
                             <input type="date" class="form-control" name="ngayMuon" id="inputName" required
-                                placeholder="Nhập ngày mượn sách..." value="{{ old('ngayMuon') }}">
+                                placeholder="Nhập ngày mượn sách..."
+                                value="{{ old('ngayMuon', date('Y-m-d')) }}">
                         </div>
                         <div class="col-md-6">
                             <label for="inputNgayMat" class="form-label">Ngày Trả</label>

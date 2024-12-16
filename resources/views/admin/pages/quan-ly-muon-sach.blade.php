@@ -2,13 +2,13 @@
 @section('content')
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Đang Mượn Sách</h2>
+        <h2>Quản lý Mượn Sách</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="{{ route('dashboard') }}">Dashboard</a>
             </li>
             <li class="active">
-                <strong>Đang Mượn Sách</strong>
+                <strong>Quản lý Mượn Sách</strong>
             </li>
         </ol>
     </div>
@@ -25,7 +25,7 @@
                 <i class="fa fa-plus-circle"></i> Thêm Người Mượn
             </button>
             <div class="ibox-title">
-                <h5>Đang Mượn Sách</h5>
+                <h5>Quản lý Mượn Sách</h5>
                 <div class="ibox-tools">
                     <a class="collapse-link">
                         <i class="fa fa-chevron-up"></i>
@@ -76,7 +76,8 @@
                                 <th>Tên Người Mượn Sách</th>
                                 <th>Số Điện Thoại</th>
                                 <th>Email</th>
-                                <th>Tổng Số Lượng</th>
+                                <th>Tổng Loại Sách</th>
+                                <th>Trạng Thái</th>
                                 <th>Ngày Mượn</th>
                                 <th>Ngày Trả</th>
                                 <th>Action</th>
@@ -91,7 +92,8 @@
                                 </td>
 
                                 <!-- Mã Mượn Sách -->
-                                <td>{{ $muonsach->maMuonSach }}</td>
+                                <!-- <td>{{ $muonsach->maMuonSach }}</td> -->
+                                <td id="maMuonMuonSach" onclick="copyToClipboard(this)" style="cursor: copy;"><i class="fa fa-copy"></i> {{ $muonsach->maMuonSach }}</td>
 
                                 <!-- Tên Người Mượn Sách -->
                                 <td>{{ $muonsach->tenNguoiMuon }}</td>
@@ -103,7 +105,34 @@
                                 <td>{{ $muonsach->email }}</td>
 
                                 <!-- Tổng Số Lượng -->
-                                <td>Đang mượn {{ $muonsach->soLuong }} sách</td>
+                                <td>Đang mượn {{ $muonsach->soLuong }} loại sách</td>
+
+                                <td>
+                                    @switch($muonsach->trangThai)
+                                    @case(1)
+                                    <span class="label label-info">Đang mượn</span>
+                                    @break
+
+                                    @case(2)
+                                    <span class="label label-success">Đã trả</span>
+                                    @break
+
+                                    @case(3)
+                                    <span class="label label-warning">Quá Hạn Trả</span>
+                                    @break
+
+                                    @case(4)
+                                    <span class="label label-primary">Đang xử lý</span>
+                                    @break
+
+                                    @case(5)
+                                    <span class="label label-danger">Đã hủy</span>
+                                    @break
+
+                                    @default
+                                    <span class="label label-secondary">Không xác định</span>
+                                    @endswitch
+                                </td>
 
                                 <!-- Ngày Mượn -->
                                 <td>{{ \Carbon\Carbon::parse($muonsach->ngayMuon)->format('d-m-Y') }}</td>
@@ -116,7 +145,7 @@
                                     <a href="#"
                                         class="icon-link btn-view" data-toggle="modal" data-target="#myModalShow" data-id="{{ $muonsach->id }}"><i class="fa fa-eye"
                                             style="color: black; font-size: 18px"></i></a>
-                                    <a href=""
+                                    <a href="{{ route('quanlymuonsach.getEditMuonSach', ['id' => $muonsach->id]) }}"
                                         class="icon-link"><i class="fa fa-pencil-square"
                                             style="color: black; font-size: 18px"></i></a>
 
@@ -157,6 +186,24 @@
 
 <div class="modal inmodal" id="myModal4" tabindex="-1" role="dialog" aria-hidden="true">
     @include('admin.partials.quanlymuonsach.form-delete-muon-sach')
-
 </div>
+
+<script>
+    function copyToClipboard(element) {
+        // Tạo một textarea ẩn để copy giá trị
+        var textArea = document.createElement("textarea");
+        textArea.value = element.textContent || element.innerText; // Lấy giá trị của thẻ td
+        document.body.appendChild(textArea);
+
+        // Chọn và sao chép giá trị
+        textArea.select();
+        document.execCommand("copy");
+
+        // Xóa textarea sau khi copy xong
+        document.body.removeChild(textArea);
+
+        // Hiển thị thông báo cho người dùng (có thể thay đổi thông báo theo ý thích)
+        alert("Mã mượn sách đã được sao chép và lưu vào bộ nhớ đệm: " + textArea.value);
+    }
+</script>
 @endsection
